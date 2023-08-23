@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>IoT Duck Sanctuary</title>
+    </head>
+</html>
+
+<!DOCTYPE HTML>
+<html>
+    <body>
+        <b>IoT Bird Coop Control Panel</b><br>
+    </body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <body>
+        Coop Temperature: <span id="temperature"></span>&deg; C<br>
+        Select Coop Mode:
+        <form action="https://api.particle.io/v1/devices/3a003b000d47313037363132/temp_setMode?access_token=2e5569e5f41cc8e1262c80458dcc48a2650ddb74" method="POST">
+            <input type="radio" name="args" value="Incubate"> Put Coop into Incubation Mode.<br>
+            <input type="radio" name="args" value="NullMotion"> Put Coop into Egg Incubation Mode.<br>
+            <input type="radio" name="args" value="Regulate"> Put Coop into Temperature Regulation Mode.<br>
+            <input type="submit" value="Set Mode">
+        </form>
+        Select Security Mode:
+        <form action="https://api.particle.io/v1/devices/3a003b000d47313037363132/secur_setMode?access_token=2e5569e5f41cc8e1262c80458dcc48a2650ddb74" method="POST">
+            <input type="radio" name="args" value="Arm"> Arm the Coop's security tracker.<br>
+            <input type="radio" name="args" value="deArm"> DeArm the Coop's security tracker.<br>
+            <input type="submit" value="Set Security">
+        </form>
+    </body>
+    <body>
+        Motion was Detected <span id="threatNumber"></span> Time(s) While the Security system was active<br><br>
+    </body>
+    <script type="text/javascript">
+        var deviceID = "3a003b000d47313037363132";
+        var accessToken = "2e5569e5f41cc8e1262c80458dcc48a2650ddb74";
+        var baseURL = "https://api.particle.io/v1/devices/"
+
+        var varName = "motionCounter"; // name of the motion counter variable
+        requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+        $.getJSON(requestURL, function(json) {
+            document.getElementById("threatNumber").innerHTML = json.result;
+        });
+
+        var varName = "tempC"; // name of the temperature variable
+        requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+        $.getJSON(requestURL, function(json) {
+            document.getElementById("temperature").innerHTML = json.result;
+        });
+    </script>
+    <body>
+        Open or Close Door:
+        <form action="https://api.particle.io/v1/devices/3a003b000d47313037363132/door_setMode?access_token=2e5569e5f41cc8e1262c80458dcc48a2650ddb74" method="POST">
+            <input type="radio" name="args" value="Open"> Open the Door of the Coop.<br>
+            <input type="radio" name="args" value="Close"> Close the Door of the Coop.<br>
+            <input type="submit" value="Set Door Status">
+        </form>
+    </body>
+</html>
+
